@@ -1,0 +1,19 @@
+## Setup daily Deis backups
+
+0. SSH into a Deis instance
+1. `git clone https://github.com/glogiotatidis/deis-backup-service`
+2. Edit `units/deis-backup.service`
+  - AWS_ACCESS_KEY
+  - AWS_SECRET_KEY
+  - AWS_BACKUP_BUCKET (e.g. masterfirefoxos-backup/deis)
+  - DEIS_DOMAIN  (e.g. masterfirefoxos.com)
+3. `fleetctl load deis-backup.service`
+4. `fleetctl load deis-backup.timer`
+5. `fleetctl start deis-backup.timer`
+
+You don't need to start `deis-backup.service`, timer service will take care of that when it's time.
+
+`fleectl list-units` should list both services like this
+
+ - deis-backup.service		5277b5e9.../10.21.2.84	inactive	dead
+ - deis-backup.timer		5277b5e9.../10.21.2.84	inactive	waiting

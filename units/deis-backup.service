@@ -1,0 +1,10 @@
+[Unit]
+Description=deis-backup
+
+[Service]
+EnvironmentFile=/etc/environment
+TimeoutStartSec=20m
+ExecStartPre=/bin/sh -c "docker history giorgos/deis-backup-service >/dev/null || docker pull giorgos/deis-backup-service"
+ExecStartPre=/bin/sh -c "docker inspect deis-backup >/dev/null 2>&1 && docker rm -f deis-backup >/dev/null 2>&1 || true"
+ExecStart=/bin/sh -c "docker run --name deis-backup -e AWS_ACCESS_KEY= -e AWS_SECRET_KEY= -e AWS_BACKUP_BUCKET= -e DEIS_DOMAIN= -e HOST=$COREOS_PRIVATE_IPV4 giorgos/deis-backup-service"
+ExecStopPost=-/usr/bin/docker rm -f deis-backup
