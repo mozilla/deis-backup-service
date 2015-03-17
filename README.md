@@ -17,3 +17,6 @@ You don't need to start `deis-backup.service`, timer service will take care of t
 
  - deis-backup.service		5277b5e9.../10.21.2.84	inactive	dead
  - deis-backup.timer		5277b5e9.../10.21.2.84	inactive	waiting
+
+
+If you want to change the frequency of the backups, edit [deis-backup.timer](units/deis-backup.timer) unit and adjust `OnCalendar` entry to your needs. You can read more about the `Timer` format on [systemd.timer](http://www.freedesktop.org/software/systemd/man/systemd.timer.html) documenation.
