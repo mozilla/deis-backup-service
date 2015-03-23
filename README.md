@@ -7,6 +7,7 @@
   - AWS_SECRET_KEY
   - AWS_BACKUP_BUCKET (e.g. masterfirefoxos-backup/deis)
   - DEIS_DOMAIN  (e.g. masterfirefoxos.com)
+  - PASSPHRASE (optional passphrase to allow gpg encryption of data uploaded to S3)
 3. `fleetctl load deis-backup.service`
 4. `fleetctl load deis-backup.timer`
 5. `fleetctl start deis-backup.timer`

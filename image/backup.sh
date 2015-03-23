@@ -45,11 +45,19 @@ DATABASE_BUCKET_NAME="$(etcdctl -C ${ETCD} get /deis/database/bucketName)"
 REGISTRY_BUCKET_NAME="$(etcdctl -C ${ETCD} get /deis/registry/bucketName)"
 DATABASE_BUCKET_NAME="${DATABASE_BUCKET_NAME:-db_wal}"
 REGISTRY_BUCKET_NAME="${REGISTRY_BUCKET_NAME:-registry}"
+if [ -n "${PASSPHRASE:+x}" ]
+then
+    ENCRYPT="True"
+else
+    ENCRYPT="False"
+fi
+
 BACKUP_DIR="./`date +%Y-%m-%d-%H:%M`"
 
-cat s3cfg | ACCESS_KEY=${AWS_ACCESS_KEY} SECRET_KEY=${AWS_SECRET_KEY} HOST_BASE=s3.amazonawscom HOST_BUCKET=%\(bucket\)s.s3.amazonaws.com envsubst > ${AWS_CONFIG_FILE}
 
-cat s3cfg | ACCESS_KEY=${CEPH_ACCESS_KEY} SECRET_KEY=${CEPH_SECRET_KEY} HOST_BASE=deis-store.${DEIS_DOMAIN} HOST_BUCKET=deis-store.${DEIS_DOMAIN} envsubst > ${DEIS_CONFIG_FILE}
+cat s3cfg | ACCESS_KEY=${AWS_ACCESS_KEY} SECRET_KEY=${AWS_SECRET_KEY} HOST_BASE=s3.amazonawscom HOST_BUCKET=%\(bucket\)s.s3.amazonaws.com ENCRYPT=${ENCRYPT} PASSPHRASE=${PASSPHRASE} envsubst > ${AWS_CONFIG_FILE}
+
+cat s3cfg | ACCESS_KEY=${CEPH_ACCESS_KEY} SECRET_KEY=${CEPH_SECRET_KEY} HOST_BASE=deis-store.${DEIS_DOMAIN} HOST_BUCKET=deis-store.${DEIS_DOMAIN} ENCRYPT=False PASSPHRASE=${PASSPHRASE} envsubst > ${DEIS_CONFIG_FILE}
 
 set -x
 
