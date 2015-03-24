@@ -39,6 +39,10 @@ done
 DEIS_CONFIG_FILE=${DEIS_CONFIG_FILE:-~/.s3cfg.deis}
 AWS_CONFIG_FILE=${AWS_CONFIG_FILE:-~/.s3cfg.aws}
 
+DATABASE_HOST="$(etcdctl -C ${ETCD} get /deis/database/host)"
+DATABASE_PORT="$(etcdctl -C ${ETCD} get /deis/database/port)"
+DATABASE_USERNAME="$(etcdctl -C ${ETCD} get /deis/database/adminUser)"
+DATABASE_PASSWORD="$(etcdctl -C ${ETCD} get /deis/database/adminPass)"
 CEPH_ACCESS_KEY="$(etcdctl -C ${ETCD} get deis/store/gateway/accessKey)"
 CEPH_SECRET_KEY="$(etcdctl -C ${ETCD} get deis/store/gateway/secretKey)"
 DATABASE_BUCKET_NAME="$(etcdctl -C ${ETCD} get /deis/database/bucketName)"
@@ -60,6 +64,10 @@ cat s3cfg | ACCESS_KEY=${AWS_ACCESS_KEY} SECRET_KEY=${AWS_SECRET_KEY} HOST_BASE=
 cat s3cfg | ACCESS_KEY=${CEPH_ACCESS_KEY} SECRET_KEY=${CEPH_SECRET_KEY} HOST_BASE=deis-store.${DEIS_DOMAIN} HOST_BUCKET=deis-store.${DEIS_DOMAIN} ENCRYPT=False PASSPHRASE=${PASSPHRASE} HTTPS=False REDUCED_REDUNDANCY=False envsubst > ${DEIS_CONFIG_FILE}
 
 set -x
+
+# Dump a text backup of the database
+mkdir -p ${BACKUP_DIR}
+PGHOST=${DATABASE_HOST} PGPORT=${DATABASE_PORT} PGUSER=${DATABASE_USERNAME} PGPASSWORD=${DATABASE_PASSWORD} pg_dumpall > ${BACKUP_DIR}/database.sql
 
 # Copy the deis
 mkdir -p "${BACKUP_DIR}/${DATABASE_BUCKET_NAME}/"
