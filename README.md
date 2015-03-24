@@ -9,6 +9,7 @@
   - `DEIS_DOMAIN`: Deis Domain. Example `masterfirefoxos.com`
   - `PASSPHRASE`: Passphrase for gpg encryption of data uploaded to S3. Optional.
   - `AWS_HTTPS`: Use HTTPS to connect to S3. `True` or `False`. Optional defaults to `True`.
+  - `AWS_REDUCED_REDUNDANCY`: Use AWS Reduced Redundancy. `True` or `False`. Optional defaults to `False`.
 3. `fleetctl load deis-backup.service`
 4. `fleetctl load deis-backup.timer`
 5. `fleetctl start deis-backup.timer`
