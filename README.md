@@ -3,11 +3,12 @@
 0. SSH into a Deis instance
 1. `git clone https://github.com/glogiotatidis/deis-backup-service`
 2. Edit `units/deis-backup.service`
-  - AWS_ACCESS_KEY
-  - AWS_SECRET_KEY
-  - AWS_BACKUP_BUCKET (e.g. masterfirefoxos-backup/deis)
-  - DEIS_DOMAIN  (e.g. masterfirefoxos.com)
-  - PASSPHRASE (optional passphrase to allow gpg encryption of data uploaded to S3)
+  - `AWS_ACCESS_KEY`: AWS S3 Access Key
+  - `AWS_SECRET_KEY`: AWS S3 Secret Key
+  - `AWS_BACKUP_BUCKET`: AWS S3 Backup Bucket. Example `masterfirefoxos-backup/deis`
+  - `DEIS_DOMAIN`: Deis Domain. Example `masterfirefoxos.com`
+  - `PASSPHRASE`: Passphrase for gpg encryption of data uploaded to S3. Optional.
+  - `AWS_HTTPS`: Use HTTPS to connect to S3. `True` or `False`. Optional defaults to `True`.
 3. `fleetctl load deis-backup.service`
 4. `fleetctl load deis-backup.timer`
 5. `fleetctl start deis-backup.timer`
